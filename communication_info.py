@@ -100,7 +100,7 @@ class packet_processing(object):
             waypoints.append((0.0, 0.0))
         
         # Pack the basic info
-        packet = pack('<BIdddfff', message_id, uav_id, gps_timestamp, position[0], position[1], position[2], heading, velocity[0], velocity[1])
+        packet = pack('<BIddddfff', message_id, uav_id, gps_timestamp, position[0], position[1], position[2], heading, velocity[0], velocity[1])
         
         # Pack the waypoints
         for waypoint in waypoints:
@@ -118,8 +118,8 @@ class packet_processing(object):
         horizon_steps = 15
         
         # Define the format string for the initial part of the packet
-        header_format = '<BIdddfff'
-        header_size = 41  # Calculate the size of the header
+        header_format = '<BIddddfff'
+        header_size = 49  # Calculate the size of the header
         
         # Unpack the header
         message_id, uav_id, gps_timestamp, lat, lon, alt, heading, vx, vy = unpack(header_format, packet[:header_size])
@@ -298,6 +298,7 @@ class packet_processing(object):
         ## return info for MAPF
         elif msg_id == Message_ID.MAPF:
             if packet[1] == self.uav_id:
+                decoded_message = unpack_mapf_packet(packet) ## not sure why this unpack_mapf_packet() can't be recognized by python
                 return Message_ID.MAPF, self.unpack_mapf_packet(packet[1:])
             else:
                 return Message_ID.info, "Wrong UAV delegation on MAPF command"                        

@@ -92,7 +92,7 @@ class packet_processing(object):
         :param waypoints: List of waypoints, each a tuple of (latitude, longitude).
         :return: The packed byte array.
         """
-        horizon_steps = 15
+        horizon_steps = 5
         
         # Adjust the waypoints to have exactly 15 entries
         waypoints = waypoints[:horizon_steps]
